@@ -4,14 +4,7 @@ import * as firebase from "firebase";
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration, you have to paste here the object that comes from firebase
-const firebaseConfig = {
-  apiKey: "AIzaSyAQOKnJ6Vn4NuND1Aq_EyllXIDU4Gee-QU",
-  authDomain: "fir-auth-6a664.firebaseapp.com",
-  projectId: "fir-auth-6a664",
-  storageBucket: "fir-auth-6a664.appspot.com",
-  messagingSenderId: "452342722562",
-  appId: "1:452342722562:web:c39e635bcf5541dacfb71b",
-};
+const firebaseConfig = {};
 
 // Initialize Firebase
 let app;
