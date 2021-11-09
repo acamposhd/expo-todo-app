@@ -69,7 +69,6 @@ const LoginPage = () => {
       .then((userCredentials) => {
         // then is a fullfilled promise
         const user = userCredentials.user;
-        console.log(user.email);
       })
       .catch((error) => {
         // catch is a rejected promise

@@ -7,6 +7,7 @@ import * as firebase from "firebase";
 const firebaseConfig = {
   apiKey: "AIzaSyAQOKnJ6Vn4NuND1Aq_EyllXIDU4Gee-QU",
   authDomain: "fir-auth-6a664.firebaseapp.com",
+  databaseURL: "https://fir-auth-6a664-default-rtdb.firebaseio.com",
   projectId: "fir-auth-6a664",
   storageBucket: "fir-auth-6a664.appspot.com",
   messagingSenderId: "452342722562",
@@ -23,5 +24,7 @@ if (firebase.apps.length === 0) {
 }
 
 const auth = firebase.auth();
+const storage = firebase.storage();
+const database = firebase.database();
 
-export { auth };
+export { auth, storage, database };
