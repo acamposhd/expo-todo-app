@@ -15,16 +15,17 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-let app;
-if (firebase.apps.length === 0) {
-  console.info({ firebase });
-  app = firebase.initializeApp(firebaseConfig);
-} else {
-  app = firebase.app();
-}
+// let app;
+// if (firebase.apps.length === 0) {
+//   app = firebase.initializeApp(firebaseConfig);
+// } else {
+//   app = firebase.app();
+// }
+
+firebase.initializeApp(firebaseConfig);
 
 const auth = firebase.auth();
-const storage = firebase.storage();
+// const storage = firebase.storage();
 const database = firebase.database();
 
-export { auth, storage, database };
+export { auth, database, firebase };

@@ -6,24 +6,23 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { auth, database } from "../../../firebase";
+import { createTodo } from "../../../services/database";
 
 const CreateTodo = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const handleOnChange = (e) => {
-    setTitle(e);
+  const __handleOnChange = (e) => {
+    if (e) {
+      setTitle(e);
+    }
   };
-  const createTodo = () => {
-    const myUserId = auth.currentUser?.uid;
-    const todoRef = database.ref("Todo/" + myUserId);
+  const __handleCreate = () => {
     const todo = {
       title,
       description,
       complete: false,
-      user: myUserId,
     };
-    todoRef.push(todo);
+    createTodo(todo);
     setTitle("");
     setDescription("");
   };
@@ -36,15 +35,16 @@ const CreateTodo = () => {
           label="Add Todo"
           type="text"
           value={title}
-          onChangeText={handleOnChange}
+          onChangeText={__handleOnChange}
+          onSubmitEditing={__handleCreate}
           size="medium"
         />
         <View style={style.buttonContainer}>
           {title === "" ? (
             <Text>Start typing to add a TO-DO</Text>
           ) : (
-            <TouchableOpacity onPress={createTodo} style={style.button}>
-              <Text style={style.buttonText}>crear</Text>
+            <TouchableOpacity onPress={__handleCreate} style={style.button}>
+              <Text style={style.buttonText}>Agregar</Text>
             </TouchableOpacity>
           )}
         </View>
@@ -86,19 +86,8 @@ const style = StyleSheet.create({
     borderRadius: 10,
     alignItems: "center",
   },
-  buttonOutline: {
-    backgroundColor: "white",
-    marginTop: 5,
-    borderColor: "#0782F9",
-    borderWidth: 2,
-  },
   buttonText: {
     color: "white",
-    fontWeight: "700",
-    fontSize: 16,
-  },
-  buttonOutlineText: {
-    color: "#0782F9",
     fontWeight: "700",
     fontSize: 16,
   },

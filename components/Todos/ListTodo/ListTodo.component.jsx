@@ -1,40 +1,38 @@
 import React, { useEffect, useState } from "react";
-import {
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-  StatusBar,
-  KeyboardAvoidingView,
-} from "react-native";
-import { auth, database } from "../../../firebase";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { listTodos } from "../../../services/database";
 import Todo from "../SingleTodo";
 
 const TodoList = () => {
   const [todoList, setTodoList] = useState();
+  const [todoListDone, setTodoListDone] = useState();
   useEffect(() => {
-    const myUserId = auth.currentUser?.uid;
-    const todoRef = database.ref("Todo/" + myUserId);
-    todoRef.on("value", (snapshot) => {
-      const todos = snapshot.val();
-      const todoList = [];
-      for (let id in todos) {
-        todoList.push({ id, ...todos[id] });
-      }
-      setTodoList(todoList);
-    });
+    listTodos(setTodoList, setTodoListDone);
   }, []);
   return (
-    <KeyboardAvoidingView style={style.container}>
-      <ScrollView style={style.scrollView}>
+    <View style={style.container}>
+      <ScrollView
+        style={style.scrollView}
+        showsHorizontalScrollIndicator="false"
+      >
         {todoList ? (
-          todoList.map((todo, index) => <Todo todo={todo} key={index} />)
+          todoList.map((todo, index) => (
+            <Todo todo={todo} key={index} idx={index} />
+          ))
         ) : (
-          <Text>No TODOS yet</Text>
+          <Text></Text>
+        )}
+        {todoListDone?.length > 0 && <Text style={style.title}>DONE</Text>}
+
+        {todoListDone ? (
+          todoListDone.map((todo, index) => (
+            <Todo todo={todo} key={index} idx={index} />
+          ))
+        ) : (
+          <Text></Text>
         )}
       </ScrollView>
-    </KeyboardAvoidingView>
+    </View>
   );
 };
 export default TodoList;
@@ -44,7 +42,13 @@ const style = StyleSheet.create({
     marginBottom: 100,
     marginTop: 10,
     flex: 3,
-    paddingTop: StatusBar.currentHeight,
+    alignContent: "center",
+  },
+  title: {
+    fontWeight: "500",
+    textAlign: "center",
+    fontSize: 18,
+    color: "green",
   },
   scrollView: {
     marginHorizontal: 40,

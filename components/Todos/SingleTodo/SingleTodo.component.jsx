@@ -1,30 +1,19 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { auth, database } from "../../../firebase";
-import { Ionicons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
+import { completeTodo, deleteTodo } from "../../../services/database";
 
-const Todo = ({ todo }) => {
-  const myUserId = auth.currentUser.uid;
-  const deleteTodo = () => {
-    const todoRef = database.ref("Todo/" + myUserId).child(todo.id);
-    todoRef.remove();
-  };
-  const completeTodo = () => {
-    const todoRef = database.ref("Todo/" + myUserId).child(todo.id);
-    todoRef.update({
-      complete: !todo.complete,
-    });
-  };
+const Todo = ({ todo, idx }) => {
+  const { id, complete } = todo;
   return (
-    <View style={style.container}>
+    <View style={style.container} key={idx}>
       {todo.complete ? (
         <AntDesign
           style={style.icon}
           name="checkcircle"
           color="green"
           size={24}
-          onPress={completeTodo}
+          onPress={() => completeTodo(id, complete)}
         />
       ) : (
         <AntDesign
@@ -32,16 +21,16 @@ const Todo = ({ todo }) => {
           name="checkcircleo"
           color="black"
           size={24}
-          onPress={completeTodo}
+          onPress={() => completeTodo(id, complete)}
         />
       )}
       <View>
         <AntDesign
           style={style.icon}
-          name="minuscircleo"
+          name="minuscircle"
           size={24}
-          color="black"
-          onPress={deleteTodo}
+          color="red"
+          onPress={() => deleteTodo(id)}
         />
       </View>
       <Text
@@ -67,40 +56,10 @@ const style = StyleSheet.create({
     marginLeft: 10,
   },
   complete: {
-    backgroundColor: "white",
     textDecorationLine: "line-through",
     textDecorationStyle: "solid",
   },
   incomplete: {
     fontWeight: "500",
-  },
-  buttonContainer: {
-    width: "100%",
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 20,
-  },
-  button: {
-    backgroundColor: "#0782F9",
-    width: "100%",
-    padding: 15,
-    borderRadius: 10,
-    alignItems: "center",
-  },
-  buttonOutline: {
-    backgroundColor: "white",
-    marginTop: 5,
-    borderColor: "#0782F9",
-    borderWidth: 2,
-  },
-  buttonText: {
-    color: "white",
-    fontWeight: "700",
-    fontSize: 16,
-  },
-  buttonOutlineText: {
-    color: "#0782F9",
-    fontWeight: "700",
-    fontSize: 16,
   },
 });
