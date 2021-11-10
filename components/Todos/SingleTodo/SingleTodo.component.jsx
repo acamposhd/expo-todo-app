@@ -1,43 +1,10 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
-import { completeTodo, deleteTodo } from "../../../services/database";
 
 const Todo = ({ todo, idx }) => {
-  const { id, complete } = todo;
   return (
     <View style={style.container} key={idx}>
-      {todo.complete ? (
-        <AntDesign
-          style={style.icon}
-          name="checkcircle"
-          color="green"
-          size={24}
-          onPress={() => completeTodo(id, complete)}
-        />
-      ) : (
-        <AntDesign
-          style={style.icon}
-          name="checkcircleo"
-          color="black"
-          size={24}
-          onPress={() => completeTodo(id, complete)}
-        />
-      )}
-      <View>
-        <AntDesign
-          style={style.icon}
-          name="minuscircle"
-          size={24}
-          color="red"
-          onPress={() => deleteTodo(id)}
-        />
-      </View>
-      <Text
-        style={[todo.complete ? style.complete : style.incomplete, style.text]}
-      >
-        {todo.title}
-      </Text>
+      <Text>{todo.title}</Text>
     </View>
   );
 };

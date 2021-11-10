@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { createTodo } from "../../../services/database";
+import { createItem } from "../../../services/database";
 
 const CreateTodo = () => {
   const [title, setTitle] = useState("");
@@ -22,7 +22,7 @@ const CreateTodo = () => {
       description,
       complete: false,
     };
-    createTodo(todo);
+    createItem(todo);
     setTitle("");
     setDescription("");
   };
@@ -41,10 +41,10 @@ const CreateTodo = () => {
         />
         <View style={style.buttonContainer}>
           {title === "" ? (
-            <Text>Start typing to add a TO-DO</Text>
+            <Text>Start typing to add an item</Text>
           ) : (
             <TouchableOpacity onPress={__handleCreate} style={style.button}>
-              <Text style={style.buttonText}>Agregar</Text>
+              <Text style={style.buttonText}>Add</Text>
             </TouchableOpacity>
           )}
         </View>

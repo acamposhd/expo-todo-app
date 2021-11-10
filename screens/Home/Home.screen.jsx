@@ -9,7 +9,7 @@ const HomePage = () => {
 
   const components = [
     {
-      name: "Todo's",
+      name: "Items",
       component: TodosPage,
     },
     {
@@ -28,7 +28,7 @@ const HomePage = () => {
             iconName = focused
               ? "ios-information-circle"
               : "ios-information-circle-outline";
-          } else if (route.name === "Todo's") {
+          } else if (route.name === "Items") {
             iconName = "ios-list";
           }
           return <Ionicons name={iconName} size={size} color={color} />;

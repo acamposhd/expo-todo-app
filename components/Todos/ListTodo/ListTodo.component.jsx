@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { listTodos } from "../../../services/database";
+import { listItems } from "../../../services/database";
 import Todo from "../SingleTodo";
 
 const TodoList = () => {
-  const [todoList, setTodoList] = useState();
-  const [todoListDone, setTodoListDone] = useState();
+  const [itemList, setItemList] = useState();
   useEffect(() => {
-    listTodos(setTodoList, setTodoListDone);
+    listItems(setItemList);
   }, []);
   return (
     <View style={style.container}>
@@ -15,17 +14,8 @@ const TodoList = () => {
         style={style.scrollView}
         showsHorizontalScrollIndicator="false"
       >
-        {todoList ? (
-          todoList.map((todo, index) => (
-            <Todo todo={todo} key={index} idx={index} />
-          ))
-        ) : (
-          <Text></Text>
-        )}
-        {todoListDone?.length > 0 && <Text style={style.title}>DONE</Text>}
-
-        {todoListDone ? (
-          todoListDone.map((todo, index) => (
+        {itemList ? (
+          itemList.map((todo, index) => (
             <Todo todo={todo} key={index} idx={index} />
           ))
         ) : (

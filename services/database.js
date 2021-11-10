@@ -1,40 +1,30 @@
 import { database } from "../firebase";
 import { getCurrentUser } from "./auth";
 
-const createTodo = (newTodo) => {
-  const myUserId = getCurrentUser();
-  const todo = { uid: myUserId, ...newTodo };
-  const todoRef = database.ref("Todo/" + myUserId);
-  todoRef.push(todo);
+const createItem = (newItem) => {
+  const todoRef = database.ref("Items");
+  todoRef.push(newItem);
 };
 
-const listTodos = (setTodoList, setTodoListDone) => {
-  const myUserId = getCurrentUser();
-  const todoRef = database.ref("Todo/" + myUserId);
-  // .orderByChild("complete")
-  // .equalTo(false);
+const listItems = (setItemList) => {
+  const todoRef = database.ref("Items");
   todoRef.on("value", (snapshot) => {
-    const todos = snapshot.val();
-    const todoList = [];
-    for (let id in todos) {
-      todoList.push({ id, ...todos[id] });
+    const items = snapshot.val();
+    const itemList = [];
+    for (let id in items) {
+      itemList.push({ id, ...items[id] });
     }
-    const pending = todoList.filter((item) => !item.complete);
-    const complete = todoList.filter((item) => item.complete);
-    setTodoList(pending);
-    setTodoListDone(complete);
+    setItemList(itemList);
   });
 };
-const deleteTodo = (id) => {
-  const myUserId = getCurrentUser();
-  const todoRef = database.ref("Todo/" + myUserId).child(id);
+const deleteItem = (id) => {
+  const todoRef = database.ref("Items").child(id);
   todoRef.remove();
 };
-const completeTodo = (id, status) => {
-  const myUserId = getCurrentUser();
-  const todoRef = database.ref("Todo/" + myUserId).child(id);
+const updateItem = (id, status) => {
+  const todoRef = database.ref("Items").child(id);
   todoRef.update({
     complete: !status,
   });
 };
-export { createTodo, listTodos, deleteTodo, completeTodo };
+export { createItem, listItems, deleteItem, updateItem };
