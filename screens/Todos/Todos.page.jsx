@@ -1,32 +1,16 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
-import useWindowDimensions from "react-native/Libraries/Utilities/useWindowDimensions";
-import {
-  SvgComponentBottom,
-  SvgComponentTop,
-} from "../../components/SVG/MainComponent";
+import { SvgComponentBottom } from "../../components/SVG/MainComponent";
 import CreateTodo from "../../components/Todos/CreateTodo";
 import TodoList from "../../components/Todos/ListTodo";
+import { StyledView } from "../../shared/StyledComponents/Views/Views";
 
 const TodosPage = () => {
-  const windowHeight = useWindowDimensions().height;
   return (
-    <View style={{ minHeight: Math.round(windowHeight), ...styles.container }}>
+    <StyledView>
       <CreateTodo />
       <TodoList />
       <SvgComponentBottom />
-    </View>
+    </StyledView>
   );
 };
 export default TodosPage;
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: "column",
-    height: "100%",
-    width: "100%",
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 50,
-  },
-});
