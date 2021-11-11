@@ -14,6 +14,8 @@ const CreateTodo = () => {
   const __handleOnChange = (e) => {
     if (e) {
       setTitle(e);
+    } else {
+      setTitle("");
     }
   };
   const __handleCreate = () => {
