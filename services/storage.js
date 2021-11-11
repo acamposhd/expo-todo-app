@@ -12,31 +12,11 @@ const uploadPicture = async (url) => {
     console.log(error);
   }
 };
-const getProfilePicture = (setProfilePicture) => {
+const getProfilePicture = () => {
   try {
     const userId = getCurrentUser();
-    // const imageRef = storage.child(userId + ".jpg");
-
-    const imageRef = storage
-      .child(userId + ".jpg")
-      .getDownloadURL()
-      .then(function (url) {
-        // `url` is the download URL for 'images/stars.jpg'
-        setProfilePicture(url);
-        return url;
-        // This can be downloaded directly:
-        // var xhr = new XMLHttpRequest();
-        // xhr.responseType = "blob";
-        // xhr.onload = function (event) {
-        //   var blob = xhr.response;
-        // };
-        // xhr.open("GET", url);
-        // xhr.send();
-      })
-      .catch(function (error) {
-        // Handle any errors
-        console.log({ error });
-      });
+    const imageRef = storage.child(userId + ".jpg").getDownloadURL();
+    return imageRef;
   } catch (error) {
     console.log(error);
   }

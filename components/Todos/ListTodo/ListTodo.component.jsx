@@ -11,23 +11,32 @@ const TodoList = () => {
   }, []);
   return (
     <View style={style.container}>
+      {todoList.length > 0 && (
+        <ScrollView
+          style={style.scrollView}
+          showsHorizontalScrollIndicator="false"
+        >
+          {todoList ? (
+            todoList
+              .reverse()
+              .map((todo, index) => (
+                <Todo todo={todo} key={index} idx={index} />
+              ))
+          ) : (
+            <Text></Text>
+          )}
+        </ScrollView>
+      )}
+
+      {todoListDone?.length > 0 && <Text style={style.title}>DONE</Text>}
       <ScrollView
         style={style.scrollView}
         showsHorizontalScrollIndicator="false"
       >
-        {todoList ? (
-          todoList.map((todo, index) => (
-            <Todo todo={todo} key={index} idx={index} />
-          ))
-        ) : (
-          <Text></Text>
-        )}
-        {todoListDone?.length > 0 && <Text style={style.title}>DONE</Text>}
-
         {todoListDone ? (
-          todoListDone.map((todo, index) => (
-            <Todo todo={todo} key={index} idx={index} />
-          ))
+          todoListDone
+            .reverse()
+            .map((todo, index) => <Todo todo={todo} key={index} idx={index} />)
         ) : (
           <Text></Text>
         )}
@@ -39,18 +48,21 @@ export default TodoList;
 const style = StyleSheet.create({
   container: {
     width: "100%",
-    marginBottom: 100,
-    marginTop: 10,
-    flex: 3,
-    alignContent: "center",
+    height: "50%",
+    // marginBottom: 100,
+    // marginTop: 10,
+    flex: 5,
+    alignContent: "flex-start",
   },
   title: {
-    fontWeight: "500",
+    fontWeight: "700",
     textAlign: "center",
-    fontSize: 18,
+    fontSize: 20,
     color: "green",
   },
   scrollView: {
+    flex: 2,
     marginHorizontal: 40,
+    maxHeight: "25%",
   },
 });

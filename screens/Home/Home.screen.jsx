@@ -4,6 +4,7 @@ import TodosPage from "../Todos";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 import Profile from "../Profile";
+import COLORS from "../../constants/colors";
 const HomePage = () => {
   const Tab = createBottomTabNavigator();
 
@@ -33,7 +34,7 @@ const HomePage = () => {
           }
           return <Ionicons name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: "#B175B9",
+        tabBarActiveTintColor: COLORS.primary,
         tabBarInactiveTintColor: "grey",
       })}
     >
