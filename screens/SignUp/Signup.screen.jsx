@@ -1,36 +1,35 @@
 import { useNavigation } from "@react-navigation/core";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
-  ActivityIndicator,
   Image,
   KeyboardAvoidingView,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
+  useWindowDimensions,
   View,
 } from "react-native";
 // auth is an instance of firebase.auth() and it is imported from the firebase.js file
 import { auth } from "../../firebase";
-import logo from "../../media/images/login.png";
-import { Ionicons } from "@expo/vector-icons";
+import logo from "../../media/images/signup.png";
+import { createUser } from "../../services/database";
 import {
   StyledButton,
   StyledTextButton,
 } from "../../shared/StyledComponents/Buttons/Buttons";
-const LoginPage = () => {
+const SignUpPage = () => {
   // Our app will contain 2 states, the email and password with an empty string as initial value
-  const [email, setEmail] = useState("");
-  const [pwd, setPwd] = useState("");
-
-  const [showPdw, setShowPdw] = useState(false);
+  const [formData, setFormData] = useState({
+    email: "",
+    pwd: "",
+    validatePwd: "",
+    name: "",
+  });
 
   const [loading, setLoading] = useState(false);
 
-  const refs = {
-    email: useRef(),
-    pdw: useRef(),
-  };
+  const windowHeight = useWindowDimensions().height;
 
   // navigation is an instance of our current NavigationContainer and we access to it trough the useNavigation() custom hook
   const navigation = useNavigation();
@@ -78,16 +77,20 @@ const LoginPage = () => {
   // - pending:  when the promise execute and we don't know the final status yet
   // - fullfilled: when the promise executed correctly
   // - rejected: when there is an error or we reject the promise because it didn't return the expected result
-
-  const handleLogin = () => {
+  const handleSignup = () => {
     setLoading(true);
     auth
-      .signInWithEmailAndPassword(email, pwd)
+      .createUserWithEmailAndPassword(formData.email, formData.pwd)
       .then((userCredentials) => {
         // then is a fullfilled promise
-        const user = userCredentials.user;
         setLoading(false);
-        console.log("Logged in with:", user.email);
+        const user = userCredentials.user;
+        createUser({
+          id: user.uid,
+          email: user.email,
+          name: formData.name,
+          image: "",
+        });
       })
       .catch((error) => {
         setLoading(false);
@@ -97,78 +100,69 @@ const LoginPage = () => {
   };
 
   return (
+    // KeyboardAvoidingView is a type of view that will push the content up when a keyboard shows
     <KeyboardAvoidingView style={styles.container} behavior="height">
       <View style={styles.inputContainer}>
         <Image source={logo} style={styles.logo} />
+        {/* We have 2 text inputs that will set the state our our constants (email, pdw) */}
         <TextInput
-          ref={refs.email}
           placeholder="Email"
-          value={email}
-          onChangeText={(text) => setEmail(text)}
+          value={formData.email}
+          onChangeText={(text) =>
+            setFormData((current) => ({ ...current, email: text }))
+          }
           style={styles.input}
-          onSubmitEditing={() => refs.pdw.current.focus()}
         />
-        <View style={styles.inputContainerIcon}>
-          <TextInput
-            ref={refs.pdw}
-            placeholder="Password"
-            value={pwd}
-            onChangeText={(text) => setPwd(text)}
-            style={styles.inputIcon}
-            secureTextEntry={!showPdw}
-            onSubmitEditing={handleLogin}
-          />
-          <Ionicons
-            name={showPdw ? "eye-off-outline" : "eye-outline"}
-            size={24}
-            color="black"
-            onPress={() => setShowPdw((current) => !current)}
-            style={styles.icon}
-          />
-        </View>
+        <TextInput
+          placeholder="Name"
+          value={formData.name}
+          onChangeText={(text) =>
+            setFormData((current) => ({ ...current, name: text }))
+          }
+          style={styles.input}
+        />
+        <TextInput
+          placeholder="Password"
+          value={formData.pwd}
+          onChangeText={(text) =>
+            setFormData((current) => ({ ...current, pwd: text }))
+          }
+          style={styles.input}
+          secureTextEntry
+        />
+        <TextInput
+          placeholder="Repeat Password"
+          value={formData.validatePwd}
+          onChangeText={(text) =>
+            setFormData((current) => ({ ...current, validatePwd: text }))
+          }
+          style={styles.input}
+          secureTextEntry
+        />
       </View>
+      {/* We have 2 buttons that will execute the functions above) */}
       <View style={styles.buttonContainer}>
-        <StyledButton title="LOGIN" onPress={handleLogin} loading={loading} />
-        <StyledTextButton
+        <StyledButton
           title="CREATE ACCOUNT"
-          onPress={() => navigation.replace("Signup")}
+          onPress={handleSignup}
+          loading={loading}
+        />
+        <StyledTextButton
+          title="BACK TO LOGIN"
+          onPress={() => navigation.replace("Login")}
         />
       </View>
     </KeyboardAvoidingView>
   );
 };
-export default LoginPage;
+export default SignUpPage;
 
 const styles = StyleSheet.create({
   container: {
-    // backgroundColor: "white",
     flex: 1,
     alignItems: "center",
     justifyContent: "flex-start",
-    marginTop: 80,
-  },
-  inputContainerIcon: {
-    display: "flex",
-    flexDirection: "row",
-    // borderBottomWidth: 1,
-    // padding: 5,
-  },
-  inputIcon: {
-    flex: 1,
-    backgroundColor: "white",
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    borderTopLeftRadius: 10,
-    borderBottomLeftRadius: 10,
-    marginTop: 5,
-  },
-  icon: {
-    backgroundColor: "white",
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    borderTopRightRadius: 10,
-    borderBottomRightRadius: 10,
-    marginTop: 5,
+    marginTop: 70,
   },
   inputContainer: {
     width: "80%",
@@ -211,8 +205,8 @@ const styles = StyleSheet.create({
   },
   logo: {
     resizeMode: "stretch",
-    width: 310,
-    height: 225,
+    width: 300,
+    height: 150,
     // marginLeft: 40,
     marginBottom: 20,
   },

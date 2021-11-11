@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import Login from "./screens/Login";
+import Signup from "./screens/SignUp";
 import Home from "./screens/Home";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
@@ -17,6 +18,9 @@ export default function App() {
         {/* Each stack screen will contain a children with the inner props required to work */}
         <Stack.Screen name="Login" options={{ headerShown: false }}>
           {(props) => <Login {...props} />}
+        </Stack.Screen>
+        <Stack.Screen name="Signup" options={{ headerShown: false }}>
+          {(props) => <Signup {...props} />}
         </Stack.Screen>
         <Stack.Screen name="Home" options={{ headerShown: false }}>
           {(props) => <Home {...props} />}

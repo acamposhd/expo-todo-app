@@ -33,7 +33,7 @@ const HomePage = () => {
           }
           return <Ionicons name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: "#0782F9",
+        tabBarActiveTintColor: "#B175B9",
         tabBarInactiveTintColor: "grey",
       })}
     >

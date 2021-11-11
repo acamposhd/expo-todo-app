@@ -7,7 +7,38 @@ const createTodo = (newTodo) => {
   const todoRef = database.ref("Todo/" + myUserId);
   todoRef.push(todo);
 };
+const createUser = (user) => {
+  const userRef = database.ref("Profile");
+  userRef.push(user);
+};
+const updateProfile = () => {
+  const myUserId = getCurrentUser();
+  const todoRef = database.ref("Profile").orderByChild("id").equalTo(myUserId);
+  let profileId;
+  todoRef.on("value", (snapshot) => {
+    const profile = snapshot.val();
+    for (let id in profile) {
+      profileId = id;
+    }
+    const profileRef = database.ref("Profile").child(profileId);
+    profileRef.update({
+      image: myUserId + ".jpg",
+    });
+  });
+};
 
+const listProfile = (setProfile) => {
+  const myUserId = getCurrentUser();
+  const todoRef = database.ref("Profile").orderByChild("id").equalTo(myUserId);
+  let userProfile = {};
+  todoRef.on("value", (snapshot) => {
+    const profile = snapshot.val();
+    for (let id in profile) {
+      userProfile = profile[id];
+    }
+    setProfile(userProfile);
+  });
+};
 const listTodos = (setTodoList, setTodoListDone) => {
   const myUserId = getCurrentUser();
   const todoRef = database.ref("Todo/" + myUserId);
@@ -37,4 +68,12 @@ const completeTodo = (id, status) => {
     complete: !status,
   });
 };
-export { createTodo, listTodos, deleteTodo, completeTodo };
+export {
+  createTodo,
+  listTodos,
+  deleteTodo,
+  completeTodo,
+  createUser,
+  listProfile,
+  updateProfile,
+};
