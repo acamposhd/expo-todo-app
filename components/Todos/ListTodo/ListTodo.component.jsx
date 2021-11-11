@@ -100,9 +100,8 @@ const style = StyleSheet.create({
   },
   logo: {
     resizeMode: "cover",
-    width: "100%",
-    height: 400,
-    // marginLeft: 40,
-    // marginBottom: 20,
+    width: "80%",
+    marginLeft: "10%",
+    height: 300,
   },
 });
