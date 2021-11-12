@@ -22,15 +22,16 @@ const StyledInpuWithIconComponent = styled.TextInput`
 `;
 
 export const StyledInput = ({
-  ref,
+  refe,
   placeholder,
   value,
   onChangeText,
   onSubmitEditing,
 }) => {
+  console.log({ refe, onSubmitEditing });
   return (
     <StyledInputComponent
-      ref={ref}
+      ref={refe}
       placeholder={placeholder}
       value={value}
       onChangeText={onChangeText}
@@ -39,7 +40,7 @@ export const StyledInput = ({
   );
 };
 export const StyledInputWithIcon = ({
-  ref,
+  refe,
   placeholder,
   value,
   onChangeText,
@@ -48,7 +49,7 @@ export const StyledInputWithIcon = ({
 }) => {
   return (
     <StyledInpuWithIconComponent
-      ref={ref}
+      ref={refe}
       placeholder={placeholder}
       value={value}
       onChangeText={onChangeText}

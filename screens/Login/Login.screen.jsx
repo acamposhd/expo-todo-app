@@ -60,7 +60,7 @@ const LoginPage = () => {
       <StyledView simple width={"80%"}>
         <StyledImage source={logo} width={310} height={225} bottom={20} />
         <StyledInput
-          ref={refs.email}
+          refe={refs.email}
           placeholder="Email"
           value={email}
           onChangeText={(text) => setEmail(text)}
@@ -68,7 +68,7 @@ const LoginPage = () => {
         />
         <StyledViewInputContainerWithIcon>
           <StyledInputWithIcon
-            ref={refs.pdw}
+            refe={refs.pdw}
             placeholder="Password"
             value={pwd}
             onChangeText={(text) => setPwd(text)}

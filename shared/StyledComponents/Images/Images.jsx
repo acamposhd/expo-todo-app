@@ -8,7 +8,14 @@ const StyledImageComponent = styled.Image`
   margin-left: ${({ left }) => left ?? "0"};
 `;
 
-export const StyledImage = ({ source, bottom, width, height, left }) => {
+export const StyledImage = ({
+  source,
+  bottom,
+  width,
+  height,
+  left,
+  resizeMode,
+}) => {
   return (
     <StyledImageComponent
       width={width}
@@ -16,7 +23,7 @@ export const StyledImage = ({ source, bottom, width, height, left }) => {
       bottom={bottom}
       left={left}
       source={source}
-      resizeMode="contain"
+      resizeMode={resizeMode ?? "contain"}
     />
   );
 };
