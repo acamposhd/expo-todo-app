@@ -6,6 +6,7 @@ const StyledImageComponent = styled.Image`
   height: ${({ height }) => height ?? "300px"};
   margin-bottom: ${({ bottom }) => bottom ?? "10px"};
   margin-left: ${({ left }) => left ?? "0"};
+  border-radius: ${({ radius }) => radius ?? "0"};
 `;
 
 export const StyledImage = ({
@@ -15,6 +16,7 @@ export const StyledImage = ({
   height,
   left,
   resizeMode,
+  radius,
 }) => {
   return (
     <StyledImageComponent
@@ -24,6 +26,7 @@ export const StyledImage = ({
       left={left}
       source={source}
       resizeMode={resizeMode ?? "contain"}
+      radius={radius}
     />
   );
 };

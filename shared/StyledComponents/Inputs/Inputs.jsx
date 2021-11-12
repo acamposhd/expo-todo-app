@@ -28,7 +28,6 @@ export const StyledInput = ({
   onChangeText,
   onSubmitEditing,
 }) => {
-  console.log({ refe, onSubmitEditing });
   return (
     <StyledInputComponent
       ref={refe}

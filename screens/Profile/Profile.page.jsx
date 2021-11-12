@@ -1,18 +1,13 @@
 import { useNavigation } from "@react-navigation/core";
 import React, { useEffect, useRef, useState } from "react";
-import {
-  ActivityIndicator,
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  Modal,
-} from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View, Modal } from "react-native";
 import { auth } from "../../firebase";
 import { listProfile, updateProfile } from "../../services/database";
 import userLogo from "../../media/images/user_icon.png";
-import { StyledButton } from "../../shared/StyledComponents/Buttons/Buttons";
+import {
+  StyledButton,
+  StyledClearButton,
+} from "../../shared/StyledComponents/Buttons/Buttons";
 import * as ImagePicker from "expo-image-picker";
 import { getProfilePicture, uploadPicture } from "../../services/storage";
 import { Modalize } from "react-native-modalize";
@@ -20,7 +15,11 @@ import ImageViewer from "react-native-image-zoom-viewer";
 import { FontAwesome } from "@expo/vector-icons";
 import COLORS from "../../constants/colors";
 import { SvgComponentBottom } from "../../components/SVG/MainComponent";
+import { StyledView } from "../../shared/StyledComponents/Views/Views";
+import { StyledText } from "../../shared/StyledComponents/Text/Text";
+import { StyledImage } from "../../shared/StyledComponents/Images/Images";
 
+// TODO: more refactor
 const ListItem = ({ text, onPress, icon, idx }) => {
   const styles = StyleSheet.create({
     container: {
@@ -154,37 +153,6 @@ const ProfilePage = () => {
       }
     }, 200);
   };
-  // const pickImage = async () => {
-  //   onClose();
-  //   setPictureLoading(true);
-  //   let result = await ImagePicker.launchImageLibraryAsync(CAPTURE_OPTIONS);
-
-  //   const uploaded = await uploadPicture(result.uri.toString());
-
-  //   updateProfile();
-  //   if (uploaded) {
-  //     handlePictureDownload();
-  //   }
-
-  //   if (!result.cancelled) {
-  //     setPictureLoading(false);
-  //     // setImage(result.uri);
-  //   }
-  // };
-  // const takePicture = async () => {
-  //   onClose();
-  //   setPictureLoading(true);
-  //   let result = await ImagePicker.launchCameraAsync(CAPTURE_OPTIONS);
-  //   const uploaded = await uploadPicture(result.uri.toString());
-  //   updateProfile();
-  //   if (uploaded) {
-  //     handlePictureDownload();
-  //   }
-  //   if (!result.cancelled) {
-  //     setPictureLoading(false);
-  //     // setImage(result.uri);
-  //   }
-  // };
 
   const openPicture = () => {
     onClose();
@@ -209,21 +177,21 @@ const ProfilePage = () => {
     },
   ];
   return (
-    <View style={styles.container}>
-      <TouchableOpacity onPress={onOpen}>
-        {pictureLoading ? (
-          <ActivityIndicator size="large" color={COLORS.primary} />
-        ) : (
-          <Image
-            source={profile?.image ? { uri: profilePicture } : userLogo}
-            style={styles.logo}
-          />
-        )}
-      </TouchableOpacity>
-      {/* Simple text with the current user */}
-      <Text style={styles.title}>{profile?.name}</Text>
-      <Text style={styles.subtitle}>{profile?.email}</Text>
-      {/* Simple button that calls our function */}
+    <StyledView>
+      <StyledClearButton onPress={onOpen} loading={pictureLoading}>
+        <StyledImage
+          resizeMode="cover"
+          radius={300}
+          width={125}
+          height={125}
+          bottom={10}
+          source={profile?.image ? { uri: profilePicture } : userLogo}
+        />
+      </StyledClearButton>
+      <StyledText weight={"700"} size={22}>
+        {profile?.name}
+      </StyledText>
+      <StyledText size={16}>{profile?.email}</StyledText>
       <StyledButton
         size="50%"
         title="SIGN OUT"
@@ -233,7 +201,7 @@ const ProfilePage = () => {
       />
       <Modalize
         ref={modalizeRef}
-        snapPoint={200}
+        snapPoint={190}
         HeaderComponent={
           <View style={{ paddingHorizontal: 20, paddingVertical: 10 }}>
             <Text style={{ fontSize: 18, fontWeight: "700" }}>
@@ -279,66 +247,10 @@ const ProfilePage = () => {
               Swipe down to close
             </Text>
           )}
-          // renderHeader={() => (
-          //   <Text
-          //     style={{
-          //       color: COLORS.light,
-          //       fontSize: 20,
-          //       textAlign: "center",
-          //       alignContent: "center",
-          //       justifyContent: "center",
-          //     }}
-          //   >
-          //     Swipe down to close
-          //   </Text>
-          // )}
         />
       </Modal>
       <SvgComponentBottom />
-    </View>
+    </StyledView>
   );
 };
 export default ProfilePage;
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: "column",
-    height: "100%",
-    width: "100%",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  button: {
-    backgroundColor: "#B175B9",
-    width: "60%",
-    padding: 15,
-    borderRadius: 10,
-    alignItems: "center",
-    marginTop: 40,
-  },
-  buttonText: {
-    color: "white",
-    fontWeight: "700",
-    fontSize: 16,
-  },
-  buttonOutlineText: {
-    color: "#B175B9",
-    fontWeight: "700",
-    fontSize: 16,
-  },
-  logo: {
-    resizeMode: "cover",
-    borderRadius: 300,
-    width: 125,
-    height: 125,
-    // marginLeft: 40,
-    marginBottom: 20,
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: "700",
-  },
-  subtitle: {
-    fontSize: 16,
-  },
-});

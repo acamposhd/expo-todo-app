@@ -19,6 +19,7 @@ const StyledPrimaryTextButton = styled.TouchableOpacity`
   border-radius: 10px;
   align-items: center;
 `;
+const StyledClearButtonComponent = styled.TouchableOpacity``;
 
 export const StyledButton = ({
   onPress,
@@ -43,4 +44,13 @@ export const StyledTextButton = ({ onPress, color, title }) => (
   <StyledPrimaryTextButton onPress={onPress}>
     <ButtonText color={color ?? COLORS.primary}>{title}</ButtonText>
   </StyledPrimaryTextButton>
+);
+export const StyledClearButton = ({ onPress, children, loading }) => (
+  <StyledClearButtonComponent onPress={onPress}>
+    {loading ? (
+      <ActivityIndicator size="large" color={COLORS.primary} />
+    ) : (
+      children
+    )}
+  </StyledClearButtonComponent>
 );
