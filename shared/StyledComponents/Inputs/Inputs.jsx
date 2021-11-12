@@ -20,6 +20,7 @@ const StyledInpuWithIconComponent = styled.TextInput`
   padding-bottom: 10px;
   border-radius: 10px;
   margin-top: 5px;
+  border: ${({ border }) => (border ? "0.5px solid" : "none")};
 `;
 
 export const StyledInput = ({
@@ -29,6 +30,7 @@ export const StyledInput = ({
   onChangeText,
   onSubmitEditing,
   border,
+  autocomplete,
 }) => {
   return (
     <StyledInputComponent
@@ -38,6 +40,7 @@ export const StyledInput = ({
       onChangeText={onChangeText}
       onSubmitEditing={onSubmitEditing}
       border={border}
+      autocomplete={autocomplete}
     />
   );
 };
@@ -48,6 +51,9 @@ export const StyledInputWithIcon = ({
   onChangeText,
   onSubmitEditing,
   secureTextEntry,
+  maxLength,
+  minLegth,
+  border,
 }) => {
   return (
     <StyledInpuWithIconComponent
@@ -57,6 +63,9 @@ export const StyledInputWithIcon = ({
       onChangeText={onChangeText}
       onSubmitEditing={onSubmitEditing}
       secureTextEntry={secureTextEntry}
+      maxLength={maxLength}
+      border={border}
+      minLegth={minLegth}
     />
   );
 };

@@ -178,7 +178,7 @@ const ProfilePage = () => {
   ];
   return (
     <StyledView>
-      <StyledClearButton onPress={onOpen} loading={pictureLoading}>
+      <StyledClearButton onPress={() => onOpen()} loading={pictureLoading}>
         <StyledImage
           resizeMode="cover"
           radius={300}
@@ -188,10 +188,12 @@ const ProfilePage = () => {
           source={profile?.image ? { uri: profilePicture } : userLogo}
         />
       </StyledClearButton>
-      <StyledText weight={"700"} size={22}>
+      <StyledText weight={"700"} size={22} max="500px">
         {profile?.name}
       </StyledText>
-      <StyledText size={16}>{profile?.email}</StyledText>
+      <StyledText size={16} max="500px">
+        {profile?.email}
+      </StyledText>
       <StyledButton
         size="50%"
         title="SIGN OUT"
@@ -210,15 +212,18 @@ const ProfilePage = () => {
           </View>
         }
       >
-        {OPTIONS.map((item, idx) => (
-          <ListItem
-            text={item.text}
-            onPress={item.onPress}
-            icon={item.icon}
-            idx={idx}
-            key={idx}
-          />
-        ))}
+        {OPTIONS.map(
+          (item, idx) =>
+            !(item.text === "View Picture" && !profile.image) && (
+              <ListItem
+                text={item.text}
+                onPress={item.onPress}
+                icon={item.icon}
+                idx={idx}
+                key={idx}
+              />
+            )
+        )}
       </Modalize>
       <Modal visible={previewVisible} transparent={true}>
         <ImageViewer

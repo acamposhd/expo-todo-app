@@ -19,6 +19,12 @@ import {
   StyledViewInputContainerWithIcon,
 } from "../../shared/StyledComponents/Views/Views";
 import { STYLES } from "../../styles/styles.global";
+import { StyledText } from "../../shared/StyledComponents/Text/Text";
+import {
+  checkPassword,
+  ErrorMessage,
+  PASSWORD_CHECK_TYPES,
+} from "../../shared/Components/Shared";
 const SignUpPage = () => {
   const [formData, setFormData] = useState({
     email: "",
@@ -46,24 +52,43 @@ const SignUpPage = () => {
     return unsuscribe;
   }, []);
 
+  useEffect(() => {}, [formData.pwd]);
   const handleSignup = () => {
-    setLoading(true);
-    auth
-      .createUserWithEmailAndPassword(formData.email, formData.pwd)
-      .then((userCredentials) => {
-        setLoading(false);
-        const user = userCredentials.user;
-        createUser({
-          id: user.uid,
-          email: user.email,
-          name: formData.name,
-          image: "",
+    if (formData.pwd !== formData.validatePwd) {
+      alert("Passwords must match");
+    } else {
+      setLoading(true);
+      auth
+        .createUserWithEmailAndPassword(formData.email, formData.pwd)
+        .then((userCredentials) => {
+          setLoading(false);
+          const user = userCredentials.user;
+          createUser({
+            id: user.uid,
+            email: user.email,
+            name: formData.name,
+            image: "",
+          });
+        })
+        .catch((error) => {
+          setLoading(false);
+          alert(error.message);
         });
-      })
-      .catch((error) => {
-        setLoading(false);
-        alert(error.message);
-      });
+    }
+  };
+
+  const isDataValid = () => {
+    if (
+      !checkPassword(null, formData.pwd, formData.validatePwd) ||
+      formData.email === "" ||
+      formData.name === "" ||
+      formData.pwd === "" ||
+      formData.validatePwd === ""
+    ) {
+      return false;
+    } else {
+      return true;
+    }
   };
 
   return (
@@ -76,12 +101,26 @@ const SignUpPage = () => {
           bottom={15}
           resizeMode={"stretch"}
         />
+        <StyledText
+          max="500px"
+          align="center"
+          size="24px"
+          weight="700"
+          top={0}
+          bottom={10}
+        >
+          Join the to-do app family
+        </StyledText>
         <StyledInput
           refe={refs.email}
+          autocomplete={"email"}
           placeholder="Email"
           value={formData.email}
           onChangeText={(text) =>
-            setFormData((current) => ({ ...current, email: text }))
+            setFormData((current) => ({
+              ...current,
+              email: text,
+            }))
           }
           onSubmitEditing={() => refs.name.current.focus()}
         />
@@ -97,6 +136,8 @@ const SignUpPage = () => {
         <StyledViewInputContainerWithIcon>
           <StyledInputWithIcon
             refe={refs.pdw}
+            maxLength={10}
+            minLength={8}
             placeholder="Password"
             value={formData.pwd}
             onChangeText={(text) =>
@@ -116,6 +157,8 @@ const SignUpPage = () => {
         <StyledViewInputContainerWithIcon>
           <StyledInputWithIcon
             refe={refs.repeatPdw}
+            maxLength={10}
+            minLength={8}
             placeholder="Repeat Password"
             value={formData.validatePwd}
             onChangeText={(text) =>
@@ -132,9 +175,32 @@ const SignUpPage = () => {
             style={STYLES.icon}
           />
         </StyledViewInputContainerWithIcon>
+        {!checkPassword(
+          PASSWORD_CHECK_TYPES.match,
+          formData.pwd,
+          formData.validatePwd
+        ) && <ErrorMessage>Passwords must match</ErrorMessage>}
+        {!checkPassword(PASSWORD_CHECK_TYPES.length, formData.pwd) && (
+          <ErrorMessage>
+            Password must be between 8 and 10 characters
+          </ErrorMessage>
+        )}
+        {!checkPassword(PASSWORD_CHECK_TYPES.lower, formData.pwd) && (
+          <ErrorMessage>You must include a lowercase</ErrorMessage>
+        )}
+        {!checkPassword(PASSWORD_CHECK_TYPES.upper, formData.pwd) && (
+          <ErrorMessage>You must include an uppercase</ErrorMessage>
+        )}
+        {!checkPassword(PASSWORD_CHECK_TYPES.number, formData.pwd) && (
+          <ErrorMessage>You must include a lowercase number</ErrorMessage>
+        )}
+        {!checkPassword(PASSWORD_CHECK_TYPES.symbol, formData.pwd) && (
+          <ErrorMessage>You must include a special character</ErrorMessage>
+        )}
       </StyledView>
       <StyledView simple width={"80%"} top={25}>
         <StyledButton
+          disabled={!isDataValid()}
           title="CREATE ACCOUNT"
           onPress={handleSignup}
           loading={loading}

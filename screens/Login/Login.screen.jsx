@@ -18,6 +18,12 @@ import {
   StyledInputWithIcon,
 } from "../../shared/StyledComponents/Inputs/Inputs";
 import { STYLES } from "../../styles/styles.global";
+import {
+  checkPassword,
+  ErrorMessage,
+  PASSWORD_CHECK_TYPES,
+} from "../../shared/Components/Shared";
+import { StyledText } from "../../shared/StyledComponents/Text/Text";
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [pwd, setPwd] = useState("");
@@ -58,7 +64,17 @@ const LoginPage = () => {
   return (
     <StyledKeyboardAvoidingView>
       <StyledView simple width={"80%"}>
-        <StyledImage source={logo} width={310} height={225} bottom={20} />
+        <StyledImage source={logo} width={310} height={225} bottom={10} />
+        <StyledText
+          max="500px"
+          align="center"
+          size="24px"
+          weight="700"
+          top={0}
+          bottom={10}
+        >
+          Welcome back
+        </StyledText>
         <StyledInput
           refe={refs.email}
           placeholder="Email"
@@ -74,6 +90,8 @@ const LoginPage = () => {
             onChangeText={(text) => setPwd(text)}
             secureTextEntry={!showPdw}
             onSubmitEditing={handleLogin}
+            minLegth={8}
+            maxLength={10}
           />
           <Ionicons
             name={showPdw ? "eye-off-outline" : "eye-outline"}
@@ -83,6 +101,23 @@ const LoginPage = () => {
             style={STYLES.icon}
           />
         </StyledViewInputContainerWithIcon>
+        {!checkPassword(PASSWORD_CHECK_TYPES.length, pwd) && (
+          <ErrorMessage>
+            Password must be between 8 and 10 characters
+          </ErrorMessage>
+        )}
+        {!checkPassword(PASSWORD_CHECK_TYPES.lower, pwd) && (
+          <ErrorMessage>You must include a lowercase</ErrorMessage>
+        )}
+        {!checkPassword(PASSWORD_CHECK_TYPES.upper, pwd) && (
+          <ErrorMessage>You must include an uppercase</ErrorMessage>
+        )}
+        {!checkPassword(PASSWORD_CHECK_TYPES.number, pwd) && (
+          <ErrorMessage>You must include a lowercase number</ErrorMessage>
+        )}
+        {!checkPassword(PASSWORD_CHECK_TYPES.symbol, pwd) && (
+          <ErrorMessage>You must include a special character</ErrorMessage>
+        )}
       </StyledView>
       <StyledView width={"80%"} top={20} simple>
         <StyledButton title="LOGIN" onPress={handleLogin} loading={loading} />

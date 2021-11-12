@@ -5,7 +5,8 @@ import COLORS from "../../../constants/colors";
 import { ButtonText } from "../Text/Text";
 
 const StyledPrimaryButton = styled.TouchableOpacity`
-  background-color: ${({ bgColor }) => bgColor ?? COLORS.primary};
+  background-color: ${({ bgColor, disabled }) =>
+    disabled ? "#656565" : bgColor ?? COLORS.primary};
   width: ${({ size }) => size ?? "100%"};
   margin-top: ${({ top }) => top ?? "0"};
   padding: 12px;
@@ -28,14 +29,16 @@ export const StyledButton = ({
   loading,
   size,
   top,
+  disabled,
 }) => (
   <StyledPrimaryButton
     onPress={onPress}
     bgColor={bgColor}
     size={size}
     top={top}
+    disabled={disabled}
   >
-    <ButtonText>
+    <ButtonText disabled={disabled}>
       {loading ? <ActivityIndicator size="small" color="white" /> : title}
     </ButtonText>
   </StyledPrimaryButton>

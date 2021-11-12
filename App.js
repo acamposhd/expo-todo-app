@@ -5,6 +5,7 @@ import Login from "./screens/Login";
 import Signup from "./screens/SignUp";
 import Home from "./screens/Home";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { StatusBar } from "expo-status-bar";
 
 // We create an instance of the StackNavigator
 const Stack = createNativeStackNavigator();
@@ -13,6 +14,7 @@ export default function App() {
   return (
     // Navigator container will contain all navigation flow of our app
     <NavigationContainer>
+      <StatusBar />
       {/* We set the navigator as a Stack navigator, this one will allow us to handle navigation with a stack instead of tabs */}
       <Stack.Navigator>
         {/* Each stack screen will contain a children with the inner props required to work */}
@@ -29,12 +31,3 @@ export default function App() {
     </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
