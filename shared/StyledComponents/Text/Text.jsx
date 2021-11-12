@@ -13,10 +13,12 @@ const StyledTextComponent = styled.Text`
   font-size: ${({ size }) => size ?? "16px"};
   margin-left: ${({ left }) => left ?? "0px"};
   font-weight: ${({ weight }) => weight ?? "300"};
+  text-align: ${({ align }) => align ?? "left"};
+  margin-top: ${({ top }) => top ?? "0px"};
   color: ${({ color }) => color ?? COLORS.dark};
   text-decoration-line: ${({ crossed }) => (crossed ? "line-through" : "none")};
-  text-decoration-style: ${({ crossed }) => (crossed ? "solid" : "none")};
-  max-width: 200;
+  /* text-decoration-style: ${({ crossed }) => (crossed ? "solid" : "none")}; */
+  max-width: ${({ max }) => max ?? "200px"};
 `;
 
 export const StyledText = ({
@@ -26,6 +28,9 @@ export const StyledText = ({
   crossed,
   children,
   left,
+  align,
+  top,
+  max,
 }) => {
   return (
     <StyledTextComponent
@@ -34,6 +39,9 @@ export const StyledText = ({
       color={color}
       left={left}
       crossed={crossed}
+      align={align}
+      top={top}
+      max={max}
     >
       {children}
     </StyledTextComponent>

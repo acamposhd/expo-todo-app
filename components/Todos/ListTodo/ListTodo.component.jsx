@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import { listTodos } from "../../../services/database";
 import { Ionicons } from "@expo/vector-icons";
 import Todo from "../SingleTodo";
 import logo from "../../../media/images/notfound.png";
 import COLORS from "../../../constants/colors";
+import {
+  StyledScrollView,
+  StyledViewList,
+} from "../../../shared/StyledComponents/Views/Views";
+import { StyledImage } from "../../../shared/StyledComponents/Images/Images";
+import { StyledText } from "../../../shared/StyledComponents/Text/Text";
 
 const TodoList = () => {
   const [todoList, setTodoList] = useState();
@@ -13,95 +18,85 @@ const TodoList = () => {
     listTodos(setTodoList, setTodoListDone);
   }, []);
   return (
-    <View style={style.container}>
+    <StyledViewList>
       {todoList?.length <= 0 && todoListDone?.length <= 0 && (
         <>
-          <Image source={logo} style={style.logo} />
-          <Text style={style.bigTitle}>NOTHING HERE YET...</Text>
+          <StyledImage
+            source={logo}
+            resizeMode={"cover"}
+            width={"85%"}
+            left={"3%"}
+            height="320px"
+          />
+          <StyledText
+            color={COLORS.dark}
+            top="10px"
+            weight={"bold"}
+            align={"center"}
+            size="24px"
+            max="500px"
+          >
+            NOTHING HERE YET...
+          </StyledText>
         </>
       )}
-      {todoList?.length > 0 && <Text style={style.title}>TO-DO</Text>}
       {todoList?.length > 0 && (
-        <ScrollView
-          style={{
-            maxHeight: todoListDone?.length > 0 ? "32%" : "70%",
-            ...style.scrollView,
-          }}
+        <StyledText
+          align="center"
+          max="100%"
+          weight="700"
+          size="20px"
+          top="10px"
+        >
+          TO-DO
+        </StyledText>
+      )}
+      {todoList?.length > 0 && (
+        <StyledScrollView
+          max={todoListDone?.length <= 0}
           showsHorizontalScrollIndicator="false"
         >
-          {todoList ? (
+          {todoList &&
             todoList
               .reverse()
               .map((todo, index) => (
                 <Todo todo={todo} key={index} idx={index} />
-              ))
-          ) : (
-            <Text></Text>
-          )}
-        </ScrollView>
+              ))}
+        </StyledScrollView>
       )}
 
       {todoListDone?.length > 0 && (
-        <Text style={[style.title, style.titleDone]}>
-          <Ionicons name="checkmark-done-circle" size={18} color="#1EB55C" />
+        <StyledText
+          color={COLORS.positiveFeedback}
+          top="10px"
+          weight={"bold"}
+          align={"center"}
+          size="24px"
+          max="500px"
+        >
+          <Ionicons
+            name="checkmark-done-circle"
+            size={18}
+            color={COLORS.positiveFeedback}
+          />
           DONE
-          <Ionicons name="checkmark-done-circle" size={18} color="#1EB55C" />
-        </Text>
+          <Ionicons
+            name="checkmark-done-circle"
+            size={18}
+            color={COLORS.positiveFeedback}
+          />
+        </StyledText>
       )}
-      <ScrollView
-        style={{
-          maxHeight: todoList?.length > 0 ? "32%" : "70%",
-          ...style.scrollView,
-        }}
+      <StyledScrollView
+        max={todoList?.length <= 0}
         showsHorizontalScrollIndicator="false"
       >
-        {todoListDone ? (
+        {todoListDone &&
           todoListDone
             .reverse()
-            .map((todo, index) => <Todo todo={todo} key={index} idx={index} />)
-        ) : (
-          <Text></Text>
-        )}
-      </ScrollView>
-    </View>
+            .map((todo, index) => <Todo todo={todo} key={index} idx={index} />)}
+      </StyledScrollView>
+    </StyledViewList>
   );
 };
 export default TodoList;
-const style = StyleSheet.create({
-  container: {
-    width: "100%",
-    height: "50%",
-    // marginBottom: 100,
-    // marginTop: 10,
-    flex: 5,
-    alignContent: "flex-start",
-  },
-  title: {
-    // marginBottom: 10,
-    color: COLORS.dark,
-    marginTop: 10,
-    fontWeight: "700",
-    textAlign: "center",
-    fontSize: 20,
-  },
-  bigTitle: {
-    color: COLORS.dark,
-    marginTop: 10,
-    fontWeight: "bold",
-    textAlign: "center",
-    fontSize: 24,
-  },
-  titleDone: {
-    color: "#1EB55C",
-  },
-  scrollView: {
-    flex: 2,
-    marginHorizontal: 40,
-  },
-  logo: {
-    resizeMode: "cover",
-    width: "80%",
-    marginLeft: "10%",
-    height: 300,
-  },
-});
