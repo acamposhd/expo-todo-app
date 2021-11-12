@@ -6,6 +6,7 @@ const StyledViewComponent = styled.View`
   width: ${({ width }) => width ?? "100%"};
   height: ${({ height }) => height ?? "100%"};
   margin-top: ${({ top }) => top ?? "50px"};
+  margin-bottom: ${({ bottom }) => bottom ?? "0px"};
   flex: ${({ flex }) => flex ?? 1};
   justify-content: ${({ justify }) => justify ?? "center"};
   align-content: ${({ align }) => align ?? "center"};
@@ -27,6 +28,7 @@ const StyledViewComponentWithBorder = styled.View`
 const StyledViewComponentSimple = styled.View`
   width: ${({ width }) => width ?? "100%"};
   margin-top: ${({ top }) => top ?? "50px"};
+
 `;
 const StyledViewComponentFlexEnd = styled.View`
   flex: 1;
@@ -62,6 +64,7 @@ const StyledKeyboardAvoidingViewComponent = styled.KeyboardAvoidingView.attrs({
 export const StyledView = ({
   children,
   top,
+  bottom,
   width,
   simple,
   height,
@@ -70,10 +73,11 @@ export const StyledView = ({
   direction,
   align,
 }) => {
-  return simple ? (
-    <StyledViewComponentSimple
+  return !simple ? (
+    <StyledViewComponent
       width={width}
       top={top}
+      bottom={bottom}
       flex={flex}
       height={height}
       justify={justify}
@@ -81,11 +85,11 @@ export const StyledView = ({
       align={align}
     >
       {children}
-    </StyledViewComponentSimple>
-  ) : (
-    <StyledViewComponent width={width} top={top}>
-      {children}
     </StyledViewComponent>
+  ) : (
+    <StyledViewComponentSimple width={width} top={top}>
+      {children}
+    </StyledViewComponentSimple>
   );
 };
 export const StyledViewInputContainerWithIcon = ({ children }) => {

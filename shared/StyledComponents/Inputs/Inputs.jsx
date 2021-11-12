@@ -9,6 +9,7 @@ const StyledInputComponent = styled.TextInput`
   padding-bottom: 10px;
   border-radius: 10px;
   margin-top: 5px;
+  border: ${({ border }) => (border ? "0.5px solid" : "none")};
 `;
 const StyledInpuWithIconComponent = styled.TextInput`
   flex: 1;
@@ -27,6 +28,7 @@ export const StyledInput = ({
   value,
   onChangeText,
   onSubmitEditing,
+  border,
 }) => {
   return (
     <StyledInputComponent
@@ -35,6 +37,7 @@ export const StyledInput = ({
       value={value}
       onChangeText={onChangeText}
       onSubmitEditing={onSubmitEditing}
+      border={border}
     />
   );
 };

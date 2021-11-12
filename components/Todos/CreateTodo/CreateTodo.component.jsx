@@ -1,12 +1,10 @@
 import React, { useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Entypo } from "@expo/vector-icons";
 import { createTodo } from "../../../services/database";
+import { StyledButton } from "../../../shared/StyledComponents/Buttons/Buttons";
+import { StyledInput } from "../../../shared/StyledComponents/Inputs/Inputs";
+import { StyledText } from "../../../shared/StyledComponents/Text/Text";
+import { StyledView } from "../../../shared/StyledComponents/Views/Views";
 
 const CreateTodo = () => {
   const [title, setTitle] = useState("");
@@ -29,68 +27,38 @@ const CreateTodo = () => {
     setDescription("");
   };
   return (
-    <View style={style.container}>
-      <View style={style.inputContainer}>
-        <TextInput
-          style={style.input}
+    <StyledView
+      top={10}
+      bottom={0}
+      height="20%"
+      width="100%"
+      justify="flex-start"
+      align="center"
+    >
+      <StyledView simple width="80%" top={0}>
+        <StyledInput
           variant="standard"
-          label="Add Todo"
+          placeholder="Do my homework"
           type="text"
           value={title}
           onChangeText={__handleOnChange}
           onSubmitEditing={__handleCreate}
           size="medium"
+          border
         />
-        <View style={style.buttonContainer}>
+        <StyledView simple width="100%" top={10}>
           {title === "" ? (
-            <Text>Start typing to add a TO-DO</Text>
+            <StyledText align="center" size="18px" max="500px" weight="500">
+              <Entypo name="typing" size={22} color="black" />
+              Start typing to add a TO-DO
+              <Entypo name="typing" size={22} color="black" />
+            </StyledText>
           ) : (
-            <TouchableOpacity onPress={__handleCreate} style={style.button}>
-              <Text style={style.buttonText}>Agregar</Text>
-            </TouchableOpacity>
+            <StyledButton onPress={__handleCreate} title="ADD" />
           )}
-        </View>
-      </View>
-    </View>
+        </StyledView>
+      </StyledView>
+    </StyledView>
   );
 };
 export default CreateTodo;
-
-const style = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "flex-start",
-    marginTop: 20,
-    width: "100%",
-    height: "20%",
-  },
-  inputContainer: {
-    width: "80%",
-  },
-  input: {
-    backgroundColor: "white",
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    borderRadius: 10,
-    marginTop: 5,
-  },
-  buttonContainer: {
-    width: "100%",
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 20,
-  },
-  button: {
-    backgroundColor: "#B175B9",
-    width: "100%",
-    padding: 15,
-    borderRadius: 10,
-    alignItems: "center",
-  },
-  buttonText: {
-    color: "white",
-    fontWeight: "700",
-    fontSize: 16,
-  },
-});

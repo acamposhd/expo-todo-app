@@ -1,21 +1,16 @@
 import { database } from "../firebase";
 import { getCurrentUser } from "./auth";
 
-const createTodo = (newTodo) => {
-  const myUserId = getCurrentUser();
-  const todo = { uid: myUserId, ...newTodo };
-  const todoRef = database.ref("Todo/" + myUserId);
-  todoRef.push(todo);
-};
+
 const createUser = (user) => {
   const userRef = database.ref("Profile");
   userRef.push(user);
 };
 const updateProfile = () => {
   const myUserId = getCurrentUser();
-  const todoRef = database.ref("Profile").orderByChild("id").equalTo(myUserId);
+  const userRef = database.ref("Profile").orderByChild("id").equalTo(myUserId);
   let profileId;
-  todoRef.on("value", (snapshot) => {
+  userRef.on("value", (snapshot) => {
     const profile = snapshot.val();
     for (let id in profile) {
       profileId = id;
@@ -26,18 +21,23 @@ const updateProfile = () => {
     });
   });
 };
-
 const listProfile = (setProfile) => {
   const myUserId = getCurrentUser();
-  const todoRef = database.ref("Profile").orderByChild("id").equalTo(myUserId);
+  const userRef = database.ref("Profile").orderByChild("id").equalTo(myUserId);
   let userProfile = {};
-  todoRef.on("value", (snapshot) => {
+  userRef.on("value", (snapshot) => {
     const profile = snapshot.val();
     for (let id in profile) {
       userProfile = profile[id];
     }
     setProfile(userProfile);
   });
+};
+const createTodo = (newTodo) => {
+  const myUserId = getCurrentUser();
+  const todo = { uid: myUserId, ...newTodo };
+  const todoRef = database.ref("Todo/" + myUserId);
+  todoRef.push(todo);
 };
 const listTodos = (setTodoList, setTodoListDone) => {
   const myUserId = getCurrentUser();
