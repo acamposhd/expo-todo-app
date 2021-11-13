@@ -214,7 +214,7 @@ const ProfilePage = () => {
       >
         {OPTIONS.map(
           (item, idx) =>
-            !(item.text === "View Picture" && !profile.image) && (
+            !(item.text === "View Picture" && !profile?.image) && (
               <ListItem
                 text={item.text}
                 onPress={item.onPress}

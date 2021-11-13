@@ -19,7 +19,6 @@ const StyledTextComponent = styled.Text`
   margin-bottom: ${({ bottom }) => bottom ?? "0px"};
   color: ${({ color }) => color ?? COLORS.dark};
   text-decoration-line: ${({ crossed }) => (crossed ? "line-through" : "none")};
-  /* text-decoration-style: ${({ crossed }) => (crossed ? "solid" : "none")}; */
   max-width: ${({ max }) => max ?? "200px"};
 `;
 

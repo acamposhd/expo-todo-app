@@ -18,7 +18,7 @@ const StyledInpuWithIconComponent = styled.TextInput`
   padding-right: 15px;
   padding-top: 10px;
   padding-bottom: 10px;
-  border-radius: 10px;
+  border-top-left-radius: 10px;
   margin-top: 5px;
   border: ${({ border }) => (border ? "0.5px solid" : "none")};
 `;
