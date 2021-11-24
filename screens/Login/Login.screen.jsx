@@ -1,181 +1,132 @@
 import { useNavigation } from "@react-navigation/core";
-import React, { useEffect, useState } from "react";
-import {
-  Image,
-  KeyboardAvoidingView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
-// auth is an instance of firebase.auth() and it is imported from the firebase.js file
+import React, { useEffect, useRef, useState } from "react";
 import { auth } from "../../firebase";
-import logo from "../../media/images/utags.png";
+import logo from "../../media/images/login.png";
+import { Ionicons } from "@expo/vector-icons";
+import {
+  StyledButton,
+  StyledTextButton,
+} from "../../shared/StyledComponents/Buttons/Buttons";
+import {
+  StyledKeyboardAvoidingView,
+  StyledView,
+  StyledViewInputContainerWithIcon,
+} from "../../shared/StyledComponents/Views/Views";
+import { StyledImage } from "../../shared/StyledComponents/Images/Images";
+import {
+  StyledInput,
+  StyledInputWithIcon,
+} from "../../shared/StyledComponents/Inputs/Inputs";
+import { STYLES } from "../../styles/styles.global";
+import {
+  checkPassword,
+  ErrorMessage,
+  PASSWORD_CHECK_TYPES,
+} from "../../shared/Components/Shared";
+import { StyledText } from "../../shared/StyledComponents/Text/Text";
 const LoginPage = () => {
-  // Our app will contain 2 states, the email and password with an empty string as initial value
   const [email, setEmail] = useState("");
   const [pwd, setPwd] = useState("");
+  const [showPdw, setShowPdw] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  // navigation is an instance of our current NavigationContainer and we access to it trough the useNavigation() custom hook
+  const refs = {
+    email: useRef(),
+    pdw: useRef(),
+  };
+
   const navigation = useNavigation();
-
-  // Use Effect is a hook that listen to side effects, we can use it in 3 ways:
-  // -Without dependency array: it will execute on each render
-  // -With an empty dependency array: it will execute only on the first render
-  // -With a dependency array with dependecies: it will execute when the dependecies change
-
   useEffect(() => {
-    // We call the function onAuthStateChanged which is a listener that will be checking for changes on the current
-    // state of authentiation.
     const unsuscribe = auth.onAuthStateChanged((user) => {
-      // When the auth changes we will receive a user
       if (user) {
-        // if there is a valid user we will replace the current screen for the Home one.
         navigation.replace("Home");
       }
     });
-    // When the component unmounts we return the same constant to unsuscribe to the listener
+
     return unsuscribe;
   }, []);
-  // This comments apply for both functions, you just need to change the name of the function called from auth
-  // We use two function(createUserWithEmailAndPassword,signInWithEmailAndPassword ) from the auth instance
-  // It receives email and password and creates or authenticate a new account on firebase
 
-  // This is a promise based function, so we can call it in two ways:
-  // -With a then/catch syntax (as we did in this app)
-  // -With an async/await aproach: (as below)
-  // try {
-  //   const userCredentials = await auth.createUserWithEmailAndPassword(
-  //     email,
-  //     pdw
-  //   );
-  //   const user = userCredentials.user;
-  //   console.log(user.email);
-  // } catch (error) {
-  //   alert(error.message);
-  // }
-  // in order to the last example to work the function must be declared with the async keyword:
-  // const handleSignup = async()=>{}
-
-  // A promise is a function tha will execute and return something in the future
-  // it has 3 posible status:
-  // - pending:  when the promise execute and we don't know the final status yet
-  // - fullfilled: when the promise executed correctly
-  // - rejected: when there is an error or we reject the promise because it didn't return the expected result
-  const handleSignup = () => {
-    auth
-      .createUserWithEmailAndPassword(email, pwd)
-      .then((userCredentials) => {
-        // then is a fullfilled promise
-        const user = userCredentials.user;
-        console.log(user.email);
-      })
-      .catch((error) => {
-        // catch is a rejected promise
-        alert(error.message);
-      });
-  };
   const handleLogin = () => {
+    setLoading(true);
     auth
       .signInWithEmailAndPassword(email, pwd)
       .then((userCredentials) => {
-        // then is a fullfilled promise
         const user = userCredentials.user;
+        setLoading(false);
         console.log("Logged in with:", user.email);
       })
       .catch((error) => {
-        // catch is a rejected promise
+        setLoading(false);
         alert(error.message);
       });
   };
 
   return (
-    // KeyboardAvoidingView is a type of view that will push the content up when a keyboard shows
-    <KeyboardAvoidingView style={styles.container} behavior="padding">
-      <View style={styles.inputContainer}>
-        <Image source={logo} style={styles.logo} />
-        {/* We have 2 text inputs that will set the state our our constants (email, pdw) */}
-        <TextInput
+    <StyledKeyboardAvoidingView>
+      <StyledView simple width={"80%"}>
+        <StyledImage source={logo} width={310} height={225} bottom={10} />
+        <StyledText
+          max="500px"
+          align="center"
+          size="24px"
+          weight="700"
+          top={0}
+          bottom={10}
+        >
+          Welcome back
+        </StyledText>
+        <StyledInput
+          refe={refs.email}
           placeholder="Email"
           value={email}
           onChangeText={(text) => setEmail(text)}
-          style={styles.input}
+          onSubmitEditing={() => refs.pdw.current.focus()}
         />
-        <TextInput
-          placeholder="Password"
-          value={pwd}
-          onChangeText={(text) => setPwd(text)}
-          style={styles.input}
-          secureTextEntry
+        <StyledViewInputContainerWithIcon>
+          <StyledInputWithIcon
+            refe={refs.pdw}
+            placeholder="Password"
+            value={pwd}
+            onChangeText={(text) => setPwd(text)}
+            secureTextEntry={!showPdw}
+            onSubmitEditing={handleLogin}
+            minLegth={8}
+            maxLength={10}
+          />
+          <Ionicons
+            name={showPdw ? "eye-off-outline" : "eye-outline"}
+            size={24}
+            color="black"
+            onPress={() => setShowPdw((current) => !current)}
+            style={STYLES.icon}
+          />
+        </StyledViewInputContainerWithIcon>
+        {!checkPassword(PASSWORD_CHECK_TYPES.length, pwd) && (
+          <ErrorMessage>
+            Password must be between 8 and 10 characters
+          </ErrorMessage>
+        )}
+        {!checkPassword(PASSWORD_CHECK_TYPES.lower, pwd) && (
+          <ErrorMessage>You must include a lowercase</ErrorMessage>
+        )}
+        {!checkPassword(PASSWORD_CHECK_TYPES.upper, pwd) && (
+          <ErrorMessage>You must include an uppercase</ErrorMessage>
+        )}
+        {!checkPassword(PASSWORD_CHECK_TYPES.number, pwd) && (
+          <ErrorMessage>You must include a lowercase number</ErrorMessage>
+        )}
+        {!checkPassword(PASSWORD_CHECK_TYPES.symbol, pwd) && (
+          <ErrorMessage>You must include a special character</ErrorMessage>
+        )}
+      </StyledView>
+      <StyledView width={"80%"} top={20} simple>
+        <StyledButton title="LOGIN" onPress={handleLogin} loading={loading} />
+        <StyledTextButton
+          title="CREATE ACCOUNT"
+          onPress={() => navigation.replace("Signup")}
         />
-      </View>
-      {/* We have 2 buttons that will execute the functions above) */}
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={handleLogin} style={styles.button}>
-          <Text style={styles.buttonText}>Login</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={handleSignup}
-          style={[styles.button, styles.buttonOutline]}
-        >
-          <Text style={styles.buttonOutlineText}>Sign Up</Text>
-        </TouchableOpacity>
-      </View>
-    </KeyboardAvoidingView>
+      </StyledView>
+    </StyledKeyboardAvoidingView>
   );
 };
 export default LoginPage;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  inputContainer: {
-    width: "80%",
-  },
-  input: {
-    backgroundColor: "white",
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    borderRadius: 10,
-    marginTop: 5,
-  },
-  buttonContainer: {
-    width: "60%",
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 40,
-  },
-  button: {
-    backgroundColor: "#0782F9",
-    width: "100%",
-    padding: 15,
-    borderRadius: 10,
-    alignItems: "center",
-  },
-  buttonOutline: {
-    backgroundColor: "white",
-    marginTop: 5,
-    borderColor: "#0782F9",
-    borderWidth: 2,
-  },
-  buttonText: {
-    color: "white",
-    fontWeight: "700",
-    fontSize: 16,
-  },
-  buttonOutlineText: {
-    color: "#0782F9",
-    fontWeight: "700",
-    fontSize: 16,
-  },
-  logo: {
-    width: 220,
-    height: 220,
-    marginLeft: 40,
-    marginBottom: 20,
-  },
-});
