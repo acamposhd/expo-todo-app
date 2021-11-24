@@ -28,7 +28,6 @@ const StyledViewComponentWithBorder = styled.View`
 const StyledViewComponentSimple = styled.View`
   width: ${({ width }) => width ?? "100%"};
   margin-top: ${({ top }) => top ?? "50px"};
-
 `;
 const StyledViewComponentFlexEnd = styled.View`
   flex: 1;
@@ -44,6 +43,12 @@ const StyledViewComponentListContainer = styled.View`
 const StyledViewInputContainerWithIconComponent = styled.View`
   display: flex;
   flex-direction: row;
+`;
+const StyledViewPaddingOnly = styled.View`
+  padding-left: ${({ horizontal }) => horizontal ?? "0px"};
+  padding-right: ${({ horizontal }) => horizontal ?? "0px"};
+  padding-left: ${({ vertical }) => vertical ?? "0px"};
+  padding-left: ${({ vertical }) => vertical ?? "0px"};
 `;
 const StyledScrollViewComponent = styled.ScrollView`
   flex: 2;
@@ -136,5 +141,12 @@ export const StyledScrollView = ({
     >
       {children}
     </StyledScrollViewComponent>
+  );
+};
+export const StyledViewPadding = ({ children, horizontal, vertical }) => {
+  return (
+    <StyledViewPaddingOnly horizontal={horizontal} vertical={vertical}>
+      {children}
+    </StyledViewPaddingOnly>
   );
 };
